@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * Title Pop install file.
+ */
+
+function webform_cond_email_schema() {
+$schema['webform_cond_email'] = array(
+        'description' => 'Webform components.',
+          'fields' => array(
+            'webform_cond_email_id' => array(
+              'description' => 'auto increment id',
+              'type' => 'serial'),
+            'webform' => array(
+              'description' => 'webform',
+              'type' => 'varchar',
+              'length' => 255),
+            'webform_component' => array(
+              'description' => 'webform component',
+              'type' => 'varchar',
+              'length' => 255),
+         ),
+        'primary key' => array('webform_cond_email_id'),
+     );
+$schema['webform_cond_emails'] = array(
+        'description' => 'Emails.',
+          'fields' => array(
+            'webform_cond_emails_id' => array(
+              'description' => 'auto increment id',
+              'type' => 'serial'),
+            'email' => array(
+              'description' => 'webform',
+              'type' => 'varchar',
+              'length' => 255),
+         ),
+        'primary key' => array('webform_cond_emails_id'),
+     );
+$schema['webform_cond_email_mapping'] = array(
+        'description' => 'Webform Mapping.',
+          'fields' => array(
+            'webform' => array(
+              'description' => 'webform',
+              'type' => 'int',
+              'length' => 3),
+            'component' => array(
+              'description' => 'webform',
+              'type' => 'varchar',
+              'length' => 255),
+            'email' => array(
+              'description' => 'webform',
+              'type' => 'int',
+              'length' => 3),
+            ),
+        );
+   return $schema;
+}

@@ -1,0 +1,9 @@
+; $Id: $
+name = Webform Condittional Email
+description = Webform Email Routing
+
+package = Webform
+
+dependencies[] = webform
+
+core = 7.x
