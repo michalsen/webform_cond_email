@@ -101,7 +101,8 @@ function webform_mapping_form($form, &$form_state) {
 
 $email_options = db_query('SELECT DISTINCT(email), webform_cond_emails_id FROM {webform_cond_emails}');
 
- $options = '<option value="0"> -- Email -- </option>';
+ $options = '<option value=""> -- Email -- </option>';
+ //$options .= '<option value="0"> No Email </option>';
    foreach ($email_options as $ep ) {
      $options .= '<option value="' . $ep->webform_cond_emails_id . '">' . $ep->email . '</option>'; 
     }
@@ -303,7 +304,7 @@ function webform_cond_email_second_dropdown_options_element($value_dropdown_firs
 function webform_cond_email_form_submit($form, $form_state){
 
 if ($_REQUEST['form_id'] == 'webform_mapping_form' ) {
-
+  //dpm($form_state);
  if ( $form_state['input']['webforms'] > 0 ) {
    db_insert('webform_cond_email')
          ->fields(array('webform','webform_component'))
@@ -324,13 +325,16 @@ if ($_REQUEST['form_id'] == 'webform_mapping_form' ) {
         //dpm($key . ' :: ' . $value);
         $nids = explode('--', $key);
         $nid = explode('-', $nids[0]);
-
+   /*     
+      dpm($nid);
+      dpm($nids);
+      dpm('value: ' . $value);
+   */   
      if ( $value > 0 ) {   
        db_delete('webform_cond_email_mapping')
           ->condition('webform', $nid[1] )
           ->condition('component', trim($nids[1]) )
           ->execute();
-
        db_insert('webform_cond_email_mapping')
          ->fields(array('webform','component','email'))
          ->values(array(
@@ -338,9 +342,16 @@ if ($_REQUEST['form_id'] == 'webform_mapping_form' ) {
            'component' => trim($nids[1]),
            'email'     => $value,
          ))
-        ->execute();
-       }
-
+         ->execute();
+        }
+        /*
+      if ( $value == 0 ) {   
+       db_delete('webform_cond_email_mapping')
+          ->condition('webform', $nid[1] )
+          ->condition('component', trim($nids[1]) )
+          ->execute();
+        }
+        */
       }
     }
   }

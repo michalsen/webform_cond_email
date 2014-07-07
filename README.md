@@ -11,6 +11,7 @@ TODO
      - Added / Changing email mapping
   - <strike>Better db schema descriptions</strike>
   - Multiple select emails
+  - Delete email from specific mapping
 
  UNSURE
   - <strike>So I'm unsure how the component values will work if the select is a value from a View, or other dataset. Looks like I need to test this. </strike>
