@@ -11,3 +11,8 @@ TODO
      - Added / Changing email mapping
   - Better db schema descriptions
   - Multiple select emails
+
+ UNSURE
+  So I'm unsure how the component values will work if the
+  select is a value from a View, or other dataset.
+  Looks like I need to test this.
