@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Title Pop install file.
+ * Webform Conditional Email install file.
  */
 
 function webform_cond_email_schema() {

@@ -2,7 +2,6 @@
 /** 
  *  Title Pop
  *  Carry the node title via a CTA to a webform autocompletion.
- *
  */
 
 function webform_cond_email_init () {
@@ -18,7 +17,9 @@ function webform_cond_email_init () {
       }
    }
 
-
+/**
+ *  Implement hook_menu for admin menu.
+ */
 function webform_cond_email_menu() {
   $items = array();
   $items['admin/webform_mapping'] = array(
@@ -40,33 +41,38 @@ function webform_cond_email_menu() {
    return $items;
 }
 
+/**
+ *  Confirm user is administrator.
+ */
 function webform_mapping_page() {
-  // Are you an admin? Hope so.
-  // Obviously this should be based on permissions, not hard-coded role.
     global $user;
   if ($user->uid == 1) {
     return drupal_get_form('webform_mapping_form');
   }
    else {
-  // ...or else returnes a blank page
+  // Or returns a blank page.
     return drupal_get_form();
   }
 }
 
+/**
+ *  Confirm user is administrator.
+ */
 function webform_cond_emails_page() {
-  // Are you an admin? Hope so.
-  // Obviously this should be based on permissions, not hard-coded role.
     global $user;
   if ($user->uid == 1) {
     return drupal_get_form('webform_cond_email_mapping_form');
   }
    else {
-  // ...or else returnes a blank page
+  // Or returns a blank page.
     return drupal_get_form();
   }
 }
 
 
+/**
+ *  Implement hook_form to build email form.
+ */
 function webform_cond_email_mapping_form($form, &$form_state) {
 
   $results = db_query('SELECT DISTINCT(email) FROM {webform_cond_emails}');
@@ -96,9 +102,10 @@ function webform_cond_email_mapping_form($form, &$form_state) {
 
 }
 
+/**
+ *  Implement hook_form to build webform mapping to email form.
+ */
 function webform_mapping_form($form, &$form_state) {
-
-
 $email_options = db_query('SELECT DISTINCT(email), webform_cond_emails_id FROM {webform_cond_emails}');
 
  $options = '<option value=""> -- Email -- </option>';
@@ -113,8 +120,6 @@ $email_options = db_query('SELECT DISTINCT(email), webform_cond_emails_id FROM {
  $markup .= '<table>';
  $markup .= '<tr>';
  $markup .= '<th>Delete</th>';
- //$markup .= '<th>Content Type [machine name]</th>';
- //$markup .= '<th>Content Element [field id]</th>';
  $markup .= '<th>Webform</th>';
  $markup .= '<th>Webform Component</th>';
  $markup .= '</tr>';
@@ -128,18 +133,9 @@ $email_options = db_query('SELECT DISTINCT(email), webform_cond_emails_id FROM {
 
       $markup .= '<tr><td>';
       $markup .= '<a href="/admin/webform_mapping/delete/' . $row->webform_cond_email_id . '">X</a>';
-/*
       $markup .= '</td><td>';
-      $markup .= $ct_result->name . ' [' . $row->content_type . ']';
-      $markup .= '</td><td>';
-      $markup .= $ce_result->field_name . ' [' . $row->content_element . ']';
-*/
-
-      $markup .= '</td><td>';
-      //$markup .= $wf_result->title . ' [' . $row->webform . ']';
       $markup .= $wf_result->title;
       $markup .= '</td><td>';
-      //$markup .= $wc_result->name . ' [' . $row->webform_component . ']';
       $markup .= $wc_result->name;
 
 $cid = explode('_', $row->webform_component);
@@ -160,12 +156,7 @@ $cid = explode('_', $row->webform_component);
            $comp = $components[1];
 
 $email = db_query('SELECT webform_cond_emails.email FROM webform_cond_emails, webform_cond_email, webform_cond_email_mapping WHERE webform_cond_email_mapping.webform = webform_cond_email.webform AND webform_cond_email_mapping.email = webform_cond_emails_id AND webform_cond_email.webform_component = :cid AND webform_cond_email.webform = :nid AND webform_cond_email_mapping.component = :comp', array(':cid' => $cid[0], ':nid' => $row->webform, ':comp' => trim(preg_replace('/ /', '_', $comp))))->fetchObject(); 
-/*
-   dpm('nid: ' . $row->webform);
-   dpm('cid: ' . $cid[0]);
-   dpm('cmp: ' . $components[1]);
-   dpm($email->email); 
-*/
+
                        $markup .= '<tr><td>';
                        $markup .= $components[1];
                        $markup .= '</td><td>';
@@ -304,7 +295,6 @@ function webform_cond_email_second_dropdown_options_element($value_dropdown_firs
 function webform_cond_email_form_submit($form, $form_state){
 
 if ($_REQUEST['form_id'] == 'webform_mapping_form' ) {
-  //dpm($form_state);
  if ( $form_state['input']['webforms'] > 0 ) {
    db_insert('webform_cond_email')
          ->fields(array('webform','webform_component'))
@@ -316,20 +306,12 @@ if ($_REQUEST['form_id'] == 'webform_mapping_form' ) {
     }
 
  if ( $form_state['input']['webforms'] == 0 ) {
- 
- //dpm($_REQUEST); 
- //dpm($form_state);
-
   foreach ($_REQUEST as $key => $value ) {
       if ( preg_match('/nid-/', $key) ) {
         //dpm($key . ' :: ' . $value);
         $nids = explode('--', $key);
         $nid = explode('-', $nids[0]);
-   /*     
-      dpm($nid);
-      dpm($nids);
-      dpm('value: ' . $value);
-   */   
+
      if ( $value > 0 ) {   
        db_delete('webform_cond_email_mapping')
           ->condition('webform', $nid[1] )
@@ -344,27 +326,9 @@ if ($_REQUEST['form_id'] == 'webform_mapping_form' ) {
          ))
          ->execute();
         }
-        /*
-      if ( $value == 0 ) {   
-       db_delete('webform_cond_email_mapping')
-          ->condition('webform', $nid[1] )
-          ->condition('component', trim($nids[1]) )
-          ->execute();
-        }
-        */
       }
     }
   }
-
-  /*
-   db_insert('webform_cond_email')
-         ->fields(array('webform','webform_component'))
-         ->values(array(
-           'webform'           => $form_state['input']['webforms'],
-           'webform_component' => $form_state['input']['dropdown_second_element'],
-         ))
-        ->execute();
-  */
    }
  }
 
@@ -406,9 +370,6 @@ $echeck = db_query('SELECT email FROM {webform_cond_emails}');
      } 
     } 
 
-     //dpm($existing);
-     //dpm($new);
-
     foreach ( $existing as $e ) {
       if ( !in_array($e, $new) ) {
         
@@ -420,34 +381,6 @@ $echeck = db_query('SELECT email FROM {webform_cond_emails}');
     }
 
    }
-
-function webform_cond_email_form_alter(&$form, $form_state, $form_id){
-/*
- if ( preg_match('/webform_client_form_/', $form_id) ) {
-
-  $referer = parse_url($_SERVER['HTTP_REFERER']);
-
-  $path = preg_replace('#^/#', '', $referer['path']);
-  $node = drupal_get_normal_path($path);
-  $nid  = preg_replace('#node/#', '', $node);
-
-  $node = node_load($nid);
-
-  $tp_results = db_query('SELECT content_type, content_element, webform, webform_component FROM webform_cond_email WHERE content_type = :ct', array(':ct' => ucwords(strtolower($node->type))))->fetchObject();
-
-  $title     = $node->title;
-  $component = $tp_results->webform_component;
-
- foreach( $form_state['webform']['component_tree']['children'] as $key=>$value ) {
-     if ( $value[cid] == $component) {
-        $element = $value['form_key'];
-        $form_state['webform']['component_tree']['children'][$key]['value'] = $node->title;
-        $form['submitted'][$element]['#default_value'] = $node->title;
-      }
-    }
-  }
-  */
-}
 
 function webform_cond_email_webform_submission_insert($node, $submission) {
  
@@ -465,7 +398,6 @@ $email_result = db_query('SELECT webform_cond_emails.email FROM webform_cond_ema
  
   $render = webform_submission_render($node, $submission, $email, $format);
 
-  //dpm($render);
   $subject = $node->title . ' Submission';
     $module = 'webform_cond_email';
     $key = 'key';
