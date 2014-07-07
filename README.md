@@ -13,6 +13,7 @@ TODO
   - Multiple select emails
 
  UNSURE
+ <strike>
   So I'm unsure how the component values will work if the
   select is a value from a View, or other dataset.
-  Looks like I need to test this.
+  Looks like I need to test this. </strike>
