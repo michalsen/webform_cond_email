@@ -13,7 +13,7 @@ TODO
   - <strike>Better db schema descriptions</strike>
   - Multiple select emails
   - Delete email from specific mapping
-  - Issue with hook_webform_submission_insert() and firing off email when no warrented (temp fix)
+  - Issue with hook_webform_submission_insert() and firing off email when no warranted (temp fix)
 
 
  UNSURE
