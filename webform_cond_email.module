@@ -395,7 +395,7 @@ $email_result = db_query('SELECT webform_cond_emails.email FROM webform_cond_ema
 
   $email = $email_result->email;
   $format = 'html';
- 
+ if ( strlen($email) > 0 ) {
   $render = webform_submission_render($node, $submission, $email, $format);
 
   $subject = $node->title . ' Submission';
@@ -418,7 +418,7 @@ $email_result = db_query('SELECT webform_cond_emails.email FROM webform_cond_ema
 
     // Send e-mail.
     $message['result'] = $system->mail($message);
-
+  }
 }
 
 
